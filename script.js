@@ -1,69 +1,64 @@
-document.getElementById('wishForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+document.getElementById('wishForm').addEventListener('submit', function(e) {
+    e.preventDefault();
     const name = document.getElementById('name').value;
     const age = document.getElementById('age').value;
     const wish = document.getElementById('wish').value;
-
-    document.getElementById('wish-name').textContent = `Happy Birthday, ${name}!`;
-    document.getElementById('wish-age').textContent = `Age: ${age}`;
-    document.getElementById('wish-message').textContent = wish;
-
-    document.getElementById('form-container').style.display = 'none';
-    document.getElementById('wish-container').style.display = 'block';
-
-    startListeningForBlow();
+    const generatedLink = `${window.location.href}?name=${name}&age=${age}&wish=${wish}`;
+    document.getElementById('generatedLink').value = generatedLink;
+    document.getElementById('linkContainer').style.display = 'block';
 });
 
-function startListeningForBlow() {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-
-    navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(function(stream) {
-            const source = audioContext.createMediaStreamSource(stream);
-            source.connect(analyser);
-
-            analyser.fftSize = 256;
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-
-            function checkBlow() {
-                analyser.getByteFrequencyData(dataArray);
-                const blowLevel = dataArray.reduce((a, b) => a + b) / bufferLength;
-
-                if (blowLevel > 150) {
-                    blowOutCandles();
-                } else {
-                    requestAnimationFrame(checkBlow);
-                }
-            }
-
-            checkBlow();
-        });
+function copyLink() {
+    const copyText = document.getElementById('generatedLink');
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    alert('Link copied to clipboard');
 }
 
-function blowOutCandles() {
-    const candles = document.querySelectorAll('.candle');
-    candles.forEach(candle => candle.style.background = 'gray');
-    document.querySelectorAll('.candle::before').forEach(flame => flame.style.display = 'none');
-
-    setTimeout(() => {
-        document.body.style.background = '#000';
-        document.getElementById('message-container').style.display = 'block';
-        createSparkles();
-    }, 2000);
+function getQueryParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return {
+        name: urlParams.get('name'),
+        age: urlParams.get('age'),
+        wish: urlParams.get('wish')
+    };
 }
 
-function createSparkles() {
-    const sparklesContainer = document.createElement('div');
-    sparklesContainer.className = 'sparkles';
-    document.body.appendChild(sparklesContainer);
-
-    for (let i = 0; i < 100; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.style.left = Math.random() * window.innerWidth + 'px';
-        sparkle.style.top = Math.random() * window.innerHeight + 'px';
-        sparkle.style.animationDelay = Math.random() * 2 + 's';
-        sparklesContainer.appendChild(sparkle);
+function displayCelebration() {
+    const params = getQueryParams();
+    if (params.name && params.age && params.wish) {
+        document.getElementById('formContainer').style.display = 'none';
+        document.getElementById('celebration').style.display = 'block';
+        document.getElementById('displayName').textContent = `Happy Birthday, ${params.name}!`;
+        document.getElementById('displayAge').textContent = `You are now ${params.age} years old!`;
+        document.getElementById('displayWish').textContent = `${params.wish}`;
+        gsap.fromTo('.flame', { scale: 1 }, { scale: 1.2, yoyo: true, repeat: -1, duration: 0.5 });
     }
 }
+
+function blowOutCandle() {
+    const flame = document.querySelector('.flame');
+    if (flame) {
+        gsap.to(flame, { opacity: 0, duration: 1, onComplete: () => flame.style.display = 'none' });
+    }
+}
+
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognition = new SpeechRecognition();
+recognition.interimResults = true;
+
+recognition.addEventListener('result', e => {
+    const transcript = Array.from(e.results)
+        .map(result => result[0])
+        .map(result => result.transcript)
+        .join('');
+
+    if (transcript.toLowerCase().includes('blow out the candles') || e.results[0].isFinal) {
+        blowOutCandle();
+    }
+});
+
+recognition.start();
+displayCelebration();

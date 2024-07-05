@@ -4,39 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Birthday Wish</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="form-container">
-        <h1>Enter Your Details</h1>
+    <div class="container" id="formContainer">
+        <h1>Enter your details</h1>
         <form id="wishForm">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            <label for="age">Age:</label>
-            <input type="number" id="age" name="age" required>
-            <label for="wish">Wish:</label>
-            <input type="text" id="wish" name="wish" required>
-            <button type="submit">Generate Wish</button>
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="number" id="age" placeholder="Your Age" required>
+            <input type="text" id="wish" placeholder="Your Wish" required>
+            <button type="submit">Generate Link</button>
         </form>
-    </div>
-    <div id="wish-container" style="display: none;">
-        <div id="cake">
-            <div class="candle" id="candle1"></div>
-            <div class="candle" id="candle2"></div>
-            <div class="candle" id="candle3"></div>
-            <div class="candle" id="candle4"></div>
-            <div class="candle" id="candle5"></div>
-            <div class="candle" id="candle6"></div>
-            <div class="candle" id="candle7"></div>
-            <div class="candle" id="candle8"></div>
-            <div class="candle" id="candle9"></div>
-        </div>
-        <div id="message-container" style="display: none;">
-            <h1 id="wish-name"></h1>
-            <p id="wish-age"></p>
-            <p id="wish-message"></p>
+        <div id="linkContainer" style="display:none;">
+            <p>Copy your link:</p>
+            <input type="text" id="generatedLink" readonly>
+            <button onclick="copyLink()">Copy</button>
         </div>
     </div>
+
+    <div id="celebration" style="display:none;">
+        <div class="cake">
+            <div class="candle">
+                <div class="flame"></div>
+            </div>
+            <h2 id="displayName"></h2>
+            <p id="displayAge"></p>
+            <p id="displayWish"></p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
