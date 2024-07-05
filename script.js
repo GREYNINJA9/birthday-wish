@@ -48,6 +48,22 @@ function blowOutCandles() {
     document.querySelectorAll('.candle::before').forEach(flame => flame.style.display = 'none');
 
     setTimeout(() => {
+        document.body.style.background = '#000';
         document.getElementById('message-container').style.display = 'block';
+        createSparkles();
     }, 2000);
+}
+
+function createSparkles() {
+    const sparklesContainer = document.createElement('div');
+    sparklesContainer.className = 'sparkles';
+    document.body.appendChild(sparklesContainer);
+
+    for (let i = 0; i < 100; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.style.left = Math.random() * window.innerWidth + 'px';
+        sparkle.style.top = Math.random() * window.innerHeight + 'px';
+        sparkle.style.animationDelay = Math.random() * 2 + 's';
+        sparklesContainer.appendChild(sparkle);
+    }
 }
