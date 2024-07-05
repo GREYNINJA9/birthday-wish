@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Birthday Wish</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
 </head>
 <body>
     <div class="container" id="formContainer">
@@ -18,22 +19,33 @@
         <div id="linkContainer" style="display:none;">
             <p>Copy your link:</p>
             <input type="text" id="generatedLink" readonly>
-            <button onclick="copyLink()">Copy</button>
+            <button type="button" onclick="copyLink()">Copy</button>
         </div>
     </div>
 
     <div id="celebration" style="display:none;">
         <div class="cake">
-            <div class="candle">
-                <div class="flame"></div>
+            <div class="candles">
+                <!-- Creating 9 candles -->
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
             </div>
             <h2 id="displayName"></h2>
             <p id="displayAge"></p>
-            <p id="displayWish"></p>
+            <p id="displayWish" class="special-wish" style="display: none;"></p>
         </div>
+        <div id="sparkles" class="sparkles" style="display: none;"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/TextPlugin.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
